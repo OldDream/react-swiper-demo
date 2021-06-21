@@ -21,7 +21,6 @@ const imgs = {
   pg8: pg4,
 };
 
-console.log();
 const slidesArr = [];
 
 for (let index = 1; index <= Object.getOwnPropertyNames(imgs).length; index++) {
@@ -89,7 +88,7 @@ const SwiperWrapper = () => {
           // .eq(index)   返回当前选中的元素中的指定序号的元素
           // https://www.swiper.com.cn/usage/dom7/index.html
           let slide = swiper.slides.eq(i);
-          console.log('transition:' + transition);
+          // console.log('transition:' + transition);
           slide.transition(transition); // 设置 transition-duration
         }
       }}
@@ -97,27 +96,50 @@ const SwiperWrapper = () => {
         console.log(
           'slideChangeTransitionStart----从当前slide开始过渡到另一个slide时执行'
         );
-        console.log(swiper.slides.length);
+        // console.log(swiper.slides.length);
         for (let i = 0; i < swiper.slides.length; i++) {
           // .eq(index)   返回当前选中的元素中的指定序号的元素
           // https://www.swiper.com.cn/usage/dom7/index.html
           let slide = swiper.slides.eq(i);
           let progress = swiper.slides[i].progress;
-          console.log(progress);
+          // console.log(progress);
           if (progress === 1) { // progress：1，代表被划走的那一个
-            console.log('命中一次！')
-            console.log(swiper.width)
-            // slide.transform(
-            //   `translate3d(${swiper.width}px,  ${swiper.height}px, -100px) scale(0.6)`
-            // );
+            // console.log('命中一次！')
+            // console.log(slide)
+            // console.log(swiper.width)
+            slide.transform(
+              `translate3d(${swiper.width}px,  0px, -1000px) scale(0.6)`
+            );
             // console.log(`translate3d(-${slide.width}px,  -${slide.height}px, -100px) scale(0.6)`)
-            slide.css('opacity', 0); //最右边slide透明
+            slide.css('opacity', 0.5); //最右边slide透明
+            swiper._myZindex = slide.css('z-index')
+            // console.log(slide.css('z-index'))
+            slide.css('z-index', -1); //最右边slide透明
             break; // loop模式下会命中多次！
           }
         }
       }}
-      onSlideChangeTransitionEnd={(swiper) => {
-        console.log('onSlideChangeTransitionEnd----过渡动画结束');
+      onSlideNextTransitionEnd={(swiper) => {
+        for (let i = 0; i < swiper.slides.length; i++) {
+          // .eq(index)   返回当前选中的元素中的指定序号的元素
+          // https://www.swiper.com.cn/usage/dom7/index.html
+          let slide = swiper.slides.eq(i);
+          let progress = swiper.slides[i].progress;
+          // console.log(progress);
+          if (progress === 1) { // progress：1，代表被划走的那一个
+            // console.log('命中一次！')
+            // console.log(slide)
+            // console.log(swiper.width)
+            // slide.transform(
+            //   `translate3d(${swiper.width}px,  0px, -1000px) scale(0.6)`
+            // );
+            // console.log(`translate3d(-${slide.width}px,  -${slide.height}px, -100px) scale(0.6)`)
+            slide.css('opacity', 0); //最右边slide透明
+            console.log('swiper._myZindex: ' + swiper._myZindex)
+            slide.css('z-index', swiper._myZindex); //最右边slide透明
+            break; // loop模式下会命中多次！
+          }
+        }
       }}
     >
       {slidesArr}
